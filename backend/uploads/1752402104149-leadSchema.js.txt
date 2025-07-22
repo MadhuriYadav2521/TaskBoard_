@@ -1,0 +1,90 @@
+const leadSchema = new mongoose.Schema(
+  {
+    leadId: { type: String, required: true, unique: true },
+    platform: { type: String, required: true },
+    phone_number: { type: String, required: true },
+    full_name: { type: String, required: true },
+    email: { type: String },
+    address:{},
+    companyName:{type:String},
+    companyUrl:{type:String},
+    campaign_name: { type: String, required: true },
+    ad_name: { type: String, required: true },
+    timestamp: { type: Date, default: Date.now },
+    leadStatus:{
+      type:String,
+      enum:['prospect','active','inactive'],
+      default:'active'
+    },
+    leadPriority:{
+      type:String,
+      enum:['VIP','major','low'],
+      default:'low'
+    },
+    stage: {
+      type: String,
+      enum: [
+        "Qualified",
+        "Not-qualified",
+        "Not-Qualified",
+        "Contacted",
+        "Unread",
+        "Inquiry",
+        "Converted",
+        "Lost",
+      ],
+      default: "Inquiry",
+    },
+    source: {type: String},
+    assigned_to: { type: String, default: "Unassigned" },
+    isAssigned: { type: Boolean, default: false },
+    status: {
+      type: String,
+      enum: ["Completed form", "Incomplete form"],
+      default: "Incomplete form",
+    },
+    remarks: { type: String },
+    assignments: [
+      {
+        assigned_by: { type: String, required: true },
+        assigned_to: { type: String, required: true },
+        assigned_date: { type: Date, default: Date.now },
+      },
+    ],
+    followUp: {
+      lastCallDate: { type: Date },
+      lastCallStatus: {
+        type: String,
+        enum: ["Completed", "Pending", "Failed", "StandBy"],
+      },
+      nextCallScheduled: { type: Date },
+    },
+    assignmentHistory: [
+      {
+        assigned_by: { type: String },
+        assigned_to: { type: String },
+        assigned_date: { type: Date, default: Date.now },
+      },
+    ],
+    followUpHistory: [
+      {
+        lastCallDate: { type: Date },
+        lastCallStatus: {
+          type: String,
+          enum: ["Completed", "Pending", "Failed"],
+        },
+        lastCallRemark: {type:String},
+        nextCallScheduled: { type: Date },
+      },
+    ],
+    customerTag:{type:String},
+    purchaseHistory:[{
+      productList:[{type:String}],
+      averageOrderValue:{type:String},
+      totalLifetimeValue:{type:String},
+      lastPurchasedate:{type:Date},
+      paymentMethod:{type:String}     
+    }]
+  },
+  { _id: false }, // No _id for this subdocument
+);

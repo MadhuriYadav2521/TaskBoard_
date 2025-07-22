@@ -1,0 +1,25 @@
+subject model                                   grade model
+subjectName                                     gradeNumber : number
+
+
+task model            
+title
+description
+filename
+grade ------- fk
+createdby   userId(teacher) -----fk
+subjectId  ---- fk
+createdDate
+deadlineDate
+
+
+submission model
+{
+  _id,
+  taskId,        // FK to Task
+  studentId,     // FK to User (student)
+  status,        // 'open', 'inProgress', etc.
+  isOpened,
+  submittedAt,
+  submissionFile
+}

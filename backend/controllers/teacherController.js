@@ -1,6 +1,7 @@
 import Tasks from "../models/taskModel.js";
 import TaskSubmissions from "../models/taskSubmissionModel.js";
 import Users from "../models/userModel.js";
+import mongoose from "mongoose";
 
 
 export const addTask = async (req, res) => {
@@ -97,6 +98,103 @@ export const getAllTask = async (req, res) => {
         return res.status(500).json({ status: 500, message: "Internal server error." });
     }
 };
+
+
+export const fetchSubmissionsByTeacher = async (req, res) => {
+  try {
+    const { teacherId } = req.body;
+
+    const result = await TaskSubmissions.aggregate([
+      {
+        $match: {
+          createdBy: new mongoose.Types.ObjectId(teacherId)
+        }
+      },
+      {
+        $lookup: {
+          from: "tasks",
+          localField: "taskId",
+          foreignField: "_id",
+          as: "taskDetails"
+        }
+      },
+      { $unwind: "$taskDetails" },
+      { $unwind: "$assignedTo" },
+      {
+        $lookup: {
+          from: "users",
+          localField: "assignedTo.studentId",
+          foreignField: "_id",
+          as: "student"
+        }
+      },
+      { $unwind: "$student" },
+      {
+        $match: {
+          "student.role": "student"
+        }
+      },
+      {
+        $project: {
+          taskId: 1,
+          taskTitle: "$taskDetails.taskTitle",
+          discription: "$taskDetails.discription",  
+          createdAt: "$taskDetails.createdAt",  
+          deadlineDate: "$taskDetails.deadlineDate",
+          grade: "$taskDetails.grade",
+          subject: "$taskDetails.subject",
+          taskFileName: "$taskDetails.taskFileName",
+          studentName: { $concat: ["$student.fName", " ", "$student.lName"] },
+          studentEmail: "$student.email",
+          studentProfileImg: "$student.profileImg",
+          submissionFile: "$assignedTo.submissionFile",
+          submittedAt: "$assignedTo.submittedAt",
+          status: "$assignedTo.status",
+          isOpened: "$assignedTo.isOpened"
+        }
+      },
+      {
+        $group: {
+          _id: "$taskId",
+          taskTitle: { $first: "$taskTitle" },
+          discription: { $first: "$discription" },
+          createdAt: { $first: "$createdAt" },
+          deadlineDate: { $first: "$deadlineDate" },
+          grade: { $first: "$grade" },
+          subject: { $first: "$subject" },
+          taskFileName: { $first: "$taskFileName" },
+          submissions: {
+            $push: {
+              studentName: "$studentName",
+              studentEmail: "$studentEmail",
+              studentProfileImg: "$studentProfileImg",
+              submissionFile: "$submissionFile",
+              submittedAt: "$submittedAt",
+              status: "$status",
+              isOpened: "$isOpened"
+            }
+          }
+        }
+      }
+    ]);
+
+    return res.status(200).json({
+      status: 200,
+      message: "Fetched all task submissions with task details",
+      data: result,
+      success: true
+    });
+
+  } catch (error) {
+    console.error("Error:", error);
+    return res.status(500).json({
+      status: 500,
+      message: "Internal server error",
+      success: false
+    });
+  }
+};
+
 
 
 

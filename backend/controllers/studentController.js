@@ -4,69 +4,185 @@ import mongoose from "mongoose";
 import Tasks from "../models/taskModel.js";
 
 
+// export const fetchTaskByStudentId = async (req, res) => {
+//     try {
+//         const { studentId, taskStatus } = req.body;
+//         console.log(req.body, "jjj");
+//         const tasks = await TaskSubmissions.aggregate([
+//             {
+//                 $match: {
+//                     "assignedTo.studentId": new mongoose.Types.ObjectId(studentId)
+//                 }
+//             },
+//             {
+//                 $addFields: {
+//                     assignedTo: {
+//                         $filter: {
+//                             input: "$assignedTo",
+//                             as: "item",
+//                             cond: {
+//                                 $and: [
+//                                     { $eq: ["$$item.studentId", new mongoose.Types.ObjectId(studentId)] },
+//                                     { $eq: ["$$item.status", taskStatus] }
+//                                 ]
+//                             }
+//                         }
+//                     }
+//                 }
+//             },
+//             {
+//                 $match: {
+//                     assignedTo: { $ne: [] } // Only keep tasks where the student has a pending entry
+//                 }
+//             },
+//             {
+//                 $lookup: {
+//                     from: "tasks",
+//                     localField: "taskId",
+//                     foreignField: "_id",
+//                     as: "taskDetails"
+//                 }
+//             },
+//             { $unwind: "$taskDetails" },
+//             {
+//                 $lookup: {
+//                     from: "users",
+//                     localField: "createdBy",
+//                     foreignField: "_id",
+//                     as: "createdByUser"
+//                 }
+//             },
+//             { $unwind: "$createdByUser" }
+//         ]);
+
+//         return res.status(200).json({
+//             status: 200,
+//             message: "Student-specific tasks fetched",
+//             tasks,
+//             success: true
+//         });
+
+//     } catch (error) {
+//         console.log("Error in fetchTaskByStudentId:", error);
+//         return res.status(500).json({ status: 500, message: "Internal server error" });
+//     }
+// };
+
+
 export const fetchTaskByStudentId = async (req, res) => {
-    try {
-        const { studentId, taskStatus } = req.body;
-        console.log(req.body, "jjj");
-        const tasks = await TaskSubmissions.aggregate([
-            {
-                $match: {
-                    "assignedTo.studentId": new mongoose.Types.ObjectId(studentId)
-                }
-            },
-            {
-                $addFields: {
-                    assignedTo: {
-                        $filter: {
-                            input: "$assignedTo",
-                            as: "item",
-                            cond: {
-                                $and: [
-                                    { $eq: ["$$item.studentId", new mongoose.Types.ObjectId(studentId)] },
-                                    { $eq: ["$$item.status", taskStatus] }
-                                ]
-                            }
-                        }
-                    }
-                }
-            },
-            {
-                $match: {
-                    assignedTo: { $ne: [] } // Only keep tasks where the student has a pending entry
-                }
-            },
-            {
-                $lookup: {
-                    from: "tasks",
-                    localField: "taskId",
-                    foreignField: "_id",
-                    as: "taskDetails"
-                }
-            },
-            { $unwind: "$taskDetails" },
-            {
-                $lookup: {
-                    from: "users",
-                    localField: "createdBy",
-                    foreignField: "_id",
-                    as: "createdByUser"
-                }
-            },
-            { $unwind: "$createdByUser" }
-        ]);
+  try {
+    const { studentId } = req.body;
+    const studentObjectId = new mongoose.Types.ObjectId(studentId);
 
-        return res.status(200).json({
-            status: 200,
-            message: "Student-specific tasks fetched",
-            tasks,
-            success: true
-        });
+    // Step 1: Fetch all submissions
+    const taskSubmissions = await TaskSubmissions.find({
+      "assignedTo.studentId": studentObjectId
+    });
 
-    } catch (error) {
-        console.log("Error in fetchTaskByStudentId:", error);
-        return res.status(500).json({ status: 500, message: "Internal server error" });
+    const bulkUpdates = [];
+
+    for (const submission of taskSubmissions) {
+      const task = await Tasks.findById(submission.taskId);
+
+      submission.assignedTo.forEach((entry, idx) => {
+        if (
+          entry.studentId.equals(studentObjectId) &&
+          entry.status === "Pending" &&
+          new Date(task.deadlineDate) < new Date()
+        ) {
+          bulkUpdates.push({
+            updateOne: {
+              filter: {
+                _id: submission._id,
+                [`assignedTo.${idx}.studentId`]: studentObjectId
+              },
+              update: {
+                $set: {
+                  [`assignedTo.${idx}.status`]: "Overdue"
+                }
+              }
+            }
+          });
+        }
+      });
     }
+
+    if (bulkUpdates.length > 0) {
+      await TaskSubmissions.bulkWrite(bulkUpdates);
+    }
+
+    // Step 2: Aggregate tasks for this student
+    const allTasks = await TaskSubmissions.aggregate([
+      {
+        $match: {
+          "assignedTo.studentId": studentObjectId
+        }
+      },
+      {
+        $addFields: {
+          assignedTo: {
+            $filter: {
+              input: "$assignedTo",
+              as: "item",
+              cond: {
+                $eq: ["$$item.studentId", studentObjectId]
+              }
+            }
+          }
+        }
+      },
+      {
+        $match: {
+          assignedTo: { $ne: [] }
+        }
+      },
+      {
+        $lookup: {
+          from: "tasks",
+          localField: "taskId",
+          foreignField: "_id",
+          as: "taskDetails"
+        }
+      },
+      { $unwind: "$taskDetails" },
+      {
+        $lookup: {
+          from: "users",
+          localField: "createdBy",
+          foreignField: "_id",
+          as: "createdByUser"
+        }
+      },
+      { $unwind: "$createdByUser" }
+    ]);
+
+    // Step 3: Separate into two groups
+    const activeTasks = [];
+    const completedTasks = [];
+
+    allTasks.forEach(task => {
+      const status = task.assignedTo[0].status;
+      if (["Pending", "Overdue"].includes(status)) {
+        activeTasks.push(task);
+      } else if (["Complete", "Accepted", "Rejected"].includes(status)) {
+        completedTasks.push(task);
+      }
+    });
+
+    return res.status(200).json({
+      status: 200,
+      message: "Tasks fetched and categorized",
+      activeTasks,
+      completedTasks,
+      success: true
+    });
+
+  } catch (error) {
+    console.error("Error in fetchTaskByStudentId:", error);
+    return res.status(500).json({ status: 500, message: "Internal server error" });
+  }
 };
+
 
 
 export const fetchNewTask = async (req, res) => {

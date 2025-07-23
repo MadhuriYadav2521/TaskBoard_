@@ -10,12 +10,11 @@ const MySubmissions = () => {
     const getTaskData = async () => {
         try {
             const data = {
-                studentId: userData?._id,
-                taskStatus: "Complete"
+                studentId: userData?._id
             }
             const response = await axios.post('http://localhost:8000/fetchTaskByStudentId', data)
             if (response.data.success == true) {
-                setTaskData(response.data.tasks)
+                setTaskData(response.data.completedTasks)
             } else {
                 alert(response.data.message)
             }

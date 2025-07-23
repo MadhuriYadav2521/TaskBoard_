@@ -4,6 +4,7 @@ import Navbar from "./Navbar";
 import Chat from "./Chat";
 import AddTask from "./AddTask";
 import TeacherViewTasks from "./TeacherViewTasks";
+import TeacherSubmissions from "./TeacherSubmissions";
 
 const TeacherDashboard = () => {
 
@@ -74,6 +75,10 @@ const TeacherDashboard = () => {
                         }
                         {selectedTab == "viewTask" &&
                             <TeacherViewTasks />
+                        }
+                        
+                        {selectedTab == "submissions" &&
+                            <TeacherSubmissions />
                         }
                     </div>
 

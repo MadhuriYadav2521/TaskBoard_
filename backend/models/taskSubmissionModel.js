@@ -10,13 +10,15 @@ const assignedTo = new Schema({
     submissionFile: String,
     status: {
         type: String,
-        enum : ["Pending", "Complete"],
+        enum : ["Pending", "Complete", "Accepted", "Rejected", "Overdue"],
         default: "Pending"
     },
     isOpened: {
         type: Boolean,
         default: false
-    }
+    },
+    feedback: String,
+
 })
 
 const submissionSchema = new Schema({

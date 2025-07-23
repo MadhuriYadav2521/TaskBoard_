@@ -142,14 +142,17 @@ const Navbar = () => {
                         <div className="mt-7">
                             <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-sm">
                                 <tbody>
-                                    <tr className="border-2 border-gray-200">
-                                        <td className="px-4 border-2 py-3 font-semibold text-gray-700 w-1/3">Grade</td>
-                                        <td className="px-4 py-3 text-gray-800">{currentUser?.grade}</td>
-                                    </tr>
+                                    {currentUser?.grade !== "" &&
+                                        <tr className="border-2 border-gray-200">
+                                            <td className="px-4 border-2 py-3 font-semibold text-gray-700 w-1/3">Grade</td>
+                                            <td className="px-4 py-3 text-gray-800">{currentUser?.grade}</td>
+                                        </tr>
+                                    }
+
                                     <tr className="border-2 border-gray-200">
                                         <td className="px-4 border-2 py-3 font-semibold text-gray-700">Subjects</td>
                                         <td className="px-4 py-3 text-gray-800">{currentUser?.subjects?.map((p, i) => (
-                                            <span className="block">{p}</span>
+                                            <span className="block">{i+1}. {p}</span>
                                         ))}</td>
                                     </tr>
                                 </tbody>

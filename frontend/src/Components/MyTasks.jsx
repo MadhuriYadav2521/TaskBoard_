@@ -19,12 +19,11 @@ const MyTasks = () => {
     const getTaskData = async () => {
         try {
             const data = {
-                studentId: userData?._id,
-                taskStatus: "Pending"
+                studentId: userData?._id
             }
             const response = await axios.post('http://localhost:8000/fetchTaskByStudentId', data)
             if (response.data.success == true) {
-                setTaskData(response.data.tasks)
+                setTaskData(response.data.activeTasks)
             } else {
                 alert(response.data.message)
             }
@@ -52,14 +51,14 @@ const MyTasks = () => {
 
     const handleSubmit = async () => {
         try {
-            if(submissionFile == ""){
+            if (submissionFile == "") {
                 alert("Please select file.")
                 return
             }
             const formData = new FormData()
-            formData.append("studentId",userData?._id);
-            formData.append("taskId",selectedTask?.taskId);
-            formData.append("submissionFile",submissionFile);
+            formData.append("studentId", userData?._id);
+            formData.append("taskId", selectedTask?.taskId);
+            formData.append("submissionFile", submissionFile);
 
             const response = await axios.post('http://localhost:8000/submitTask', formData)
             console.log(response.data, "vvvvvvvvv");
@@ -123,26 +122,28 @@ const MyTasks = () => {
                                         <td className="px-4 border-2 py-3 font-semibold text-gray-700">Status</td>
                                         <td className="px-4 py-3 text-red-500">{selectedTask.assignedTo[0].status}</td>
                                     </tr>
-
-                                    <tr className="border-2 border-gray-200">
-                                        <td className="px-4 border-2 py-3 font-semibold text-gray-700">Submit Here</td>
-                                        <td className="px-4 py-3 ">
-                                            <input
-                                                ref={fileRef}
-                                                type="file"
-                                                name="taskFileName"
-                                                className="block w-full cursor-pointer bg-white file:mr-4 file:py-2 file:px-4 file:rounded 
+                                    
+                                    {selectedTask.assignedTo[0].status !== "Overdue" &&
+                                        <tr className="border-2 border-gray-200">
+                                            <td className="px-4 border-2 py-3 font-semibold text-gray-700">Submit Here</td>
+                                            <td className="px-4 py-3 ">
+                                                <input
+                                                    ref={fileRef}
+                                                    type="file"
+                                                    name="taskFileName"
+                                                    className="block w-full cursor-pointer bg-white file:mr-4 file:py-2 file:px-4 file:rounded 
                                             file:border-0 file:bg-purple-100 file:text-purple-700 hover:file:bg-purple-200"
-                                                onChange={handleChange}
-                                            />
-                                            <button
-                                                type="submit"
-                                                onClick={handleSubmit}
-                                                className="bg-purple-500 mt-4 text-white font-semibold px-8 py-2 rounded hover:bg-purple-600 transition">
-                                                Submit
-                                            </button>
-                                        </td>
-                                    </tr>
+                                                    onChange={handleChange}
+                                                />
+                                                <button
+                                                    type="submit"
+                                                    onClick={handleSubmit}
+                                                    className="bg-purple-500 mt-4 text-white font-semibold px-8 py-2 rounded hover:bg-purple-600 transition">
+                                                    Submit
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
                                 </tbody>
                             </table>
                         </div>

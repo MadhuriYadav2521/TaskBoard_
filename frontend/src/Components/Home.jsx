@@ -77,16 +77,15 @@ const Home = () => {
 
     return (
         <>
-            <div className="bg-purple-400 flex justify-center items-center min-h-screen px-4 py-8">
-                <div className="w-full md:w-[90%] lg:w-[60%] rounded-tl-[15%] md:rounded-tl-[30%] rounded-br-[15%] md:rounded-br-[30%] shadow-lg bg-white overflow-hidden">
+            <div className="bg-purple-400 min-h-screen flex justify-center items-center px-4 py-6 overflow-y-auto">
+                <div className="w-full md:w-[90%] lg:w-[60%] rounded-tl-[10%] md:rounded-tl-[30%] rounded-br-[10%] md:rounded-br-[30%] shadow-lg bg-white overflow-hidden">
+                            <h1 className="text-purple-700 text-center font-mono text-2xl mt-4">Register</h1>
 
-                    <div className="flex flex-col md:flex-row h-full">
+                    <div className="flex flex-col md:flex-row">
 
                         {/* Left Section */}
-                        <div className="w-full md:w-1/2 py-6 px-6 md:px-10 bg-white">
-                            <h1 className="text-purple-700 text-center font-mono text-2xl mb-6">Register</h1>
+                        <div className="w-full md:w-1/2 py-6 px-6 md:px-10">
 
-                            {/** Form Inputs */}
                             {[
                                 { label: "First Name", name: "fName", type: "text" },
                                 { label: "Last Name", name: "lName", type: "text" },
@@ -94,51 +93,34 @@ const Home = () => {
                                 { label: "Password", name: "password", type: "password" },
                                 { label: "Phone", name: "phone", type: "number" },
                             ].map(({ label, name, type }) => (
-                                <div key={name} className="flex justify-between items-center mb-3">
-                                    <label className="mr-2">{label}:</label>
+                                <div key={name} className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3 gap-1">
+                                    <label className="sm:mr-2">{label}:</label>
                                     <input
                                         type={type}
                                         name={name}
                                         value={userData[name]}
                                         onChange={handleChange}
-                                        className="w-[66%] border border-purple-400 rounded-xl px-4 py-1 text-sm outline-none focus:border-purple-600"
+                                        className="w-full sm:w-[66%] border border-purple-400 rounded-xl px-4 py-1 text-sm outline-none focus:border-purple-600"
                                         required
                                     />
                                 </div>
                             ))}
 
-                            <div className="flex flex-col items-center mt-6">
-                                <button
-                                    onClick={handleSubmit}
-                                    type="submit"
-                                    className="bg-purple-500 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition"
-                                >
-                                    Register
-                                </button>
-                                <p className="mt-4 text-sm">
-                                    Already have account?{" "}
-                                    <span
-                                        onClick={() => navigate('/')}
-                                        className="text-purple-700 cursor-pointer hover:text-purple-800"
-                                    >
-                                        Log in here
-                                    </span>
-                                </p>
-                            </div>
+
                         </div>
 
                         {/* Right Section */}
-                        <div className="w-full md:w-1/2 py-6 px-6 md:px-10 bg-white">
+                        <div className="w-full md:w-1/2 py-6 px-6 md:px-10">
                             <div className="space-y-4">
 
                                 {/* Role */}
-                                <div className="flex justify-between items-center">
-                                    <label>Select Role:</label>
+                                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                                    <label className="sm:mr-2">Select Role:</label>
                                     <select
                                         name="role"
                                         value={userData.role}
                                         onChange={handleChange}
-                                        className="w-[66%] border border-purple-400 rounded-xl px-4 py-1 outline-none focus:border-purple-600"
+                                        className="w-full sm:w-[66%] border border-purple-400 rounded-xl px-4 py-1 outline-none focus:border-purple-600"
                                         required
                                     >
                                         <option value="" disabled>Select your role</option>
@@ -148,27 +130,27 @@ const Home = () => {
                                 </div>
 
                                 {/* Profile Upload */}
-                                <div className="flex justify-between items-center">
-                                    <label>Profile:</label>
+                                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                                    <label className="sm:mr-2">Profile:</label>
                                     <input
                                         type="file"
                                         name="profileImg"
                                         onChange={handleChange}
                                         ref={fileInputRef}
-                                        className="w-[66%] border border-purple-400 rounded-xl px-2 py-1 text-sm outline-none"
+                                        className="w-full sm:w-[66%] border border-purple-400 rounded-xl px-2 py-1 text-sm outline-none"
                                         required
                                     />
                                 </div>
 
-                                {/* Grade (only if student) */}
+                                {/* Grade */}
                                 {userData.role === "student" && (
-                                    <div className="flex justify-between items-center">
-                                        <label>Grade:</label>
+                                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                                        <label className="sm:mr-2">Grade:</label>
                                         <select
                                             name="grade"
                                             value={userData.grade}
                                             onChange={handleChange}
-                                            className="w-[66%] border border-purple-400 rounded-xl px-4 py-1 outline-none focus:border-purple-600"
+                                            className="w-full sm:w-[66%] border border-purple-400 rounded-xl px-4 py-1 outline-none focus:border-purple-600"
                                             required
                                         >
                                             <option value="" disabled>Select your grade</option>
@@ -200,16 +182,41 @@ const Home = () => {
                                 </div>
 
                                 {/* Image */}
-                                <img
-                                    src="https://cdni.iconscout.com/illustration/premium/thumb/teacher-and-student-doing-discussion-illustration-download-in-svg-png-gif-file-formats--meeting-educational-academic-teachers-casual-talk-e-learning-education-pack-school-illustrations-3733195.png?f=webp"
-                                    alt="Illustration"
-                                    className="w-full max-h-[200px] object-contain mt-4"
-                                />
+                                {/* <div className="hidden sm:block">
+                                    <img
+                                        src="https://cdni.iconscout.com/illustration/premium/thumb/teacher-and-student-doing-discussion-illustration-download-in-svg-png-gif-file-formats--meeting-educational-academic-teachers-casual-talk-e-learning-education-pack-school-illustrations-3733195.png?f=webp"
+                                        alt="Illustration"
+                                        className="w-full max-h-[200px] object-contain mt-4"
+                                    />
+                                </div> */}
                             </div>
+
                         </div>
+
+
                     </div>
+                    
+                        <div className="flex flex-col items-center mb-4">
+                            <button
+                                onClick={handleSubmit}
+                                type="submit"
+                                className="bg-purple-500 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition"
+                            >
+                                Register
+                            </button>
+                            <p className="mt-4 text-sm">
+                                Already have account?{" "}
+                                <span
+                                    onClick={() => navigate('/')}
+                                    className="text-purple-700 cursor-pointer hover:text-purple-800"
+                                >
+                                    Log in here
+                                </span>
+                            </p>
+                        </div>
                 </div>
             </div>
+
 
         </>
     )

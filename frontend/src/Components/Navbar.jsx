@@ -88,7 +88,7 @@ const Navbar = () => {
                         </svg>
                         {/* <BellRing /> */}
 
-                        <span className="absolute top-6 left-6 bg-purple-400 text-black shadow-2xl text-xs px-1.5 rounded-full">
+                        <span className="absolute top-4 left-2 bg-purple-400 text-black shadow-2xl text-xs px-1.5 rounded-full">
                             {unreadChatCount}
                         </span>
                     </div>

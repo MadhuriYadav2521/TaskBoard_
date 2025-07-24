@@ -33,13 +33,13 @@ const Home = () => {
 
     const handleSubmit = async () => {
         try {
-            if (!userData.fName || !userData.lName || !userData.email || !userData.password || !userData.phone || !userData.role 
+            if (!userData.fName || !userData.lName || !userData.email || !userData.password || !userData.phone || !userData.role
                 || !userData.profileImg || !userData.subjects) {
                 return alert("All field are required.")
             }
-            if(userData.role == 'student' &&  !userData.grade){
-                
-                 return alert("Please select grade.")
+            if (userData.role == 'student' && !userData.grade) {
+
+                return alert("Please select grade.")
             }
             const formData = new FormData();
 
@@ -77,116 +77,140 @@ const Home = () => {
 
     return (
         <>
-            <div className="bg-purple-400 flex justify-center align-middle" style={{ height: "100vh" }}>
-                <div className=" w-[60%]  m-20 mt-12 rounded-tl-[30%] rounded-br-[30%]">
+            <div className="bg-purple-400 flex justify-center items-center min-h-screen px-4 py-8">
+                <div className="w-full md:w-[90%] lg:w-[60%] rounded-tl-[15%] md:rounded-tl-[30%] rounded-br-[15%] md:rounded-br-[30%] shadow-lg bg-white overflow-hidden">
 
-                    <div className="flex  h-full ">
+                    <div className="flex flex-col md:flex-row h-full">
 
-                        <div className="w-[50%] bg-white rounded-tl-[30%] py-4 px-10  shadow-sm"  >
-                            <h1 className="text-purple text-center font-mono text-2xl m-3">Register</h1>
-                            <div className="flex justify-between  mb-3">
-                                <label className="mr-2">First Name: </label>
-                                <input type="text" name="fName" value={userData.fName} onChange={handleChange} className="border border-purple-400 rounded-xl focus:border-purple-400 outline-none px-4 py-1 text-sm" required />
-                            </div>
+                        {/* Left Section */}
+                        <div className="w-full md:w-1/2 py-6 px-6 md:px-10 bg-white">
+                            <h1 className="text-purple-700 text-center font-mono text-2xl mb-6">Register</h1>
 
-                            <div className="flex justify-between  mb-3">
-                                <label className="mr-2">Last Name: </label>
-                                <input type="text" name="lName" value={userData.lName} onChange={handleChange} className="border border-purple-400 rounded-xl focus:border-purple-400 outline-none px-4 py-1 text-sm" required />
-                            </div>
+                            {/** Form Inputs */}
+                            {[
+                                { label: "First Name", name: "fName", type: "text" },
+                                { label: "Last Name", name: "lName", type: "text" },
+                                { label: "Email", name: "email", type: "email" },
+                                { label: "Password", name: "password", type: "password" },
+                                { label: "Phone", name: "phone", type: "number" },
+                            ].map(({ label, name, type }) => (
+                                <div key={name} className="flex justify-between items-center mb-3">
+                                    <label className="mr-2">{label}:</label>
+                                    <input
+                                        type={type}
+                                        name={name}
+                                        value={userData[name]}
+                                        onChange={handleChange}
+                                        className="w-[66%] border border-purple-400 rounded-xl px-4 py-1 text-sm outline-none focus:border-purple-600"
+                                        required
+                                    />
+                                </div>
+                            ))}
 
-                            <div className="flex justify-between  mb-3">
-                                <label className="">Email: </label>
-                                <input type="email" name="email" value={userData.email} onChange={handleChange} className="border border-purple-400 rounded-xl focus:border-purple-400 outline-none px-4 py-1 text-sm" required />
-                            </div>
-
-                            <div className="flex justify-between align-middle mb-3">
-                                <label className="">Password: </label>
-                                <input type="password" name="password" value={userData.password} onChange={handleChange} className="border border-purple-400 rounded-xl focus:border-purple-400 outline-none px-4 py-1 text-sm" required />
-                            </div>
-
-                            <div className="flex justify-between  mb-3">
-                                <label className="">Phone: </label>
-                                <input type="number" name="phone" value={userData.phone} onChange={handleChange} className="border border-purple-400 rounded-xl focus:border-purple-400 outline-none px-4 py-1 text-sm" required />
-                            </div>
-
-                            <div className="flex justify-center items-center flex-col mt-10">
-                                <button onClick={() => handleSubmit()} type="submit" className="bg-purple-400 text-white outline-none cursor-pointer py-2 px-4 rounded-lg hover:bg-purple-600 my-3">Register</button>
-
-                            </div>
-                            <div className=" flex justify-center items-center flex-col mt-5 ">
-                                <p>Already have account? <span onClick={() => navigate('/')} className="text-purple-500 cursor-pointer hover:text-purple-800 ">Log in here</span></p>
+                            <div className="flex flex-col items-center mt-6">
+                                <button
+                                    onClick={handleSubmit}
+                                    type="submit"
+                                    className="bg-purple-500 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition"
+                                >
+                                    Register
+                                </button>
+                                <p className="mt-4 text-sm">
+                                    Already have account?{" "}
+                                    <span
+                                        onClick={() => navigate('/')}
+                                        className="text-purple-700 cursor-pointer hover:text-purple-800"
+                                    >
+                                        Log in here
+                                    </span>
+                                </p>
                             </div>
                         </div>
 
-                        <div className="w-[50%] h-full bg-white rounded-br-[30%] overflow-hidden py-4 px-10 drop-shadow-[0_8px_6px_rgba(0,0,0,0.2)]">
+                        {/* Right Section */}
+                        <div className="w-full md:w-1/2 py-6 px-6 md:px-10 bg-white">
+                            <div className="space-y-4">
 
-
-                            <div className="mt-14">
-
-
-                                <div className="flex justify-between align-middle  mb-3">
-                                    <label className="">Select Role: </label>
-                                    <select name="role" value={userData.role} onChange={handleChange} className="w-[66%] border border-purple-400 rounded-xl focus:border-purple-400 outline-none px-4 pt-1 pb-2 " required>
-                                        <option value="" disabled>
-                                            Select your role
-                                        </option>
+                                {/* Role */}
+                                <div className="flex justify-between items-center">
+                                    <label>Select Role:</label>
+                                    <select
+                                        name="role"
+                                        value={userData.role}
+                                        onChange={handleChange}
+                                        className="w-[66%] border border-purple-400 rounded-xl px-4 py-1 outline-none focus:border-purple-600"
+                                        required
+                                    >
+                                        <option value="" disabled>Select your role</option>
                                         <option value="teacher">Teacher</option>
                                         <option value="student">Student</option>
                                     </select>
                                 </div>
 
-                                <div className="flex justify-between  mb-3">
-                                    <label className="">Profile: </label>
+                                {/* Profile Upload */}
+                                <div className="flex justify-between items-center">
+                                    <label>Profile:</label>
                                     <input
                                         type="file"
                                         name="profileImg"
                                         onChange={handleChange}
-                                        ref={fileInputRef} //clear onsubmit
-                                        className="w-[66%] border border-purple-400 rounded-xl focus:border-purple-400 outline-none px-1 pt-1 pb-2 text-sm" required />
+                                        ref={fileInputRef}
+                                        className="w-[66%] border border-purple-400 rounded-xl px-2 py-1 text-sm outline-none"
+                                        required
+                                    />
                                 </div>
 
-                                {userData?.role == 'student' &&
-                                    <div className="flex justify-between align-middle  mb-3">
-                                        <label className="">Grade: </label>
-                                        <select name="grade" value={userData.grade} onChange={handleChange} className="w-[66%] border border-purple-400 rounded-xl focus:border-purple-400 outline-none px-4 pt-1 pb-2 " required>
-                                            <option value="" disabled>
-                                            Select your grade
-                                        </option>
+                                {/* Grade (only if student) */}
+                                {userData.role === "student" && (
+                                    <div className="flex justify-between items-center">
+                                        <label>Grade:</label>
+                                        <select
+                                            name="grade"
+                                            value={userData.grade}
+                                            onChange={handleChange}
+                                            className="w-[66%] border border-purple-400 rounded-xl px-4 py-1 outline-none focus:border-purple-600"
+                                            required
+                                        >
+                                            <option value="" disabled>Select your grade</option>
                                             {grades.map((g) => (
-                                                <option value={g.value}>{g.name}</option>
+                                                <option key={g.value} value={g.value}>{g.name}</option>
                                             ))}
                                         </select>
                                     </div>
-                                }
+                                )}
 
-                                <div className="flex align-middle">
-                                    <label className="">Subjects: </label>
-                                    <div className="ml-10">
+                                {/* Subjects */}
+                                <div>
+                                    <label>Subjects:</label>
+                                    <div className="grid grid-cols-2 gap-x-4 pl-4 mt-1">
                                         {subjectsList.map((subject) => (
-                                            <div div className="">
+                                            <label key={subject} className="flex items-center space-x-2">
                                                 <input
                                                     type="checkbox"
                                                     name="subjects"
                                                     value={subject}
                                                     onChange={handleChange}
                                                     checked={userData.subjects.includes(subject)}
-                                                    className="w-4 h-4 accent-purple-600 border-purple-400 rounded focus:ring-purple-300"
+                                                    className="accent-purple-600 border-purple-400 rounded"
                                                 />
-                                                <label className="ml-2">{subject}</label> <br />
-                                            </div>
+                                                <span>{subject}</span>
+                                            </label>
                                         ))}
                                     </div>
                                 </div>
 
-                                <img src="https://cdni.iconscout.com/illustration/premium/thumb/teacher-and-student-doing-discussion-illustration-download-in-svg-png-gif-file-formats--meeting-educational-academic-teachers-casual-talk-e-learning-education-pack-school-illustrations-3733195.png?f=webp" alt="" className=" h-full w-full object-contain bg-white rounded-br-[30%] " />
+                                {/* Image */}
+                                <img
+                                    src="https://cdni.iconscout.com/illustration/premium/thumb/teacher-and-student-doing-discussion-illustration-download-in-svg-png-gif-file-formats--meeting-educational-academic-teachers-casual-talk-e-learning-education-pack-school-illustrations-3733195.png?f=webp"
+                                    alt="Illustration"
+                                    className="w-full max-h-[200px] object-contain mt-4"
+                                />
                             </div>
-
-
                         </div>
                     </div>
-
                 </div>
             </div>
+
         </>
     )
 }

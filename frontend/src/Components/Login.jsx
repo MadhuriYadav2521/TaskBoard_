@@ -16,12 +16,12 @@ const Login = () => {
             if (!userData.email || !userData.password) {
                 return alert("All field are required.")
             }
-            console.log(userData,"vvvvvvvvv");
-            
+            console.log(userData, "vvvvvvvvv");
+
             const response = await axios.post('https://taskboard-sewf.onrender.com/login', userData)
             console.log(response, "cccccc");
             if (response.data.success == false) {
-               return alert(`${response.data.message}`)
+                return alert(`${response.data.message}`)
             } else if (response.data.success == true) {
                 localStorage.setItem('sapToken', JSON.stringify(response.data.token))
                 localStorage.setItem('sapuserData', JSON.stringify(response.data.userData))
@@ -50,38 +50,65 @@ const Login = () => {
 
     return (
         <>
-            <div className="bg-purple-400 flex justify-center align-middle" style={{ height: "100vh" }}>
-                <div className="bg-white w-[50%] h-auto m-40 rounded-tl-[30%] rounded-br-[30%]">
-                    <h1 className="text-purple text-center font-mono text-2xl m-5 ">Login</h1>
-                    <div className=" w-[85%] m-auto p-5 mt-7">
-                        <div >
-                            <div className="flex justify-between">
-                                <div className="w-[55%]">
-                                    <div className="flex justify-between  mb-3">
-                                        <label className="">Email: </label>
-                                        <input type="email" name="email" value={userData.email} onChange={handleChange} className="border border-purple-400 rounded-xl focus:border-purple-400 outline-none px-4 py-1 text-sm" required />
-                                    </div>
-
-                                    <div className="flex justify-between align-middle mb-3">
-                                        <label className="">Password: </label>
-                                        <input type="password" name="password" value={userData.password} onChange={handleChange} className="border border-purple-400 rounded-xl focus:border-purple-400 outline-none px-4 py-1 text-sm" required />
-                                    </div>
-
-                                    <div className="flex justify-center items-center flex-col">
-                                        <button onClick={() => handleSubmit()} type="submit" className="bg-purple-400 text-white outline-none cursor-pointer py-2 px-4 rounded-lg hover:bg-purple-600 my-3">Login</button>
-
-                                    </div>
+            <div className="bg-purple-400 flex justify-center items-center min-h-screen px-4">
+                <div className="bg-white w-full max-w-3xl rounded-tl-[15%] rounded-br-[15%] p-6 md:p-12">
+                    <h1 className="text-purple-700 text-center font-mono text-2xl mb-6">Login</h1>
+                    <div className="w-full">
+                        <div className="flex flex-col md:flex-row justify-between gap-6">
+                            {/* Left side form */}
+                            <div className="w-full md:w-1/2">
+                                <div className="mb-4">
+                                    <label className="block mb-1">Email:</label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value={userData.email}
+                                        onChange={handleChange}
+                                        className="w-full border border-purple-400 rounded-xl focus:border-purple-600 outline-none px-4 py-2 text-sm"
+                                        required
+                                    />
                                 </div>
 
-                                <div className="w-[35%] flex justify-start items-start flex-col">
-                                    <p>Don't have account? <span onClick={() => navigate('/register')} className="text-purple-500 cursor-pointer hover:text-purple-800 ">Register here</span></p>
+                                <div className="mb-4">
+                                    <label className="block mb-1">Password:</label>
+                                    <input
+                                        type="password"
+                                        name="password"
+                                        value={userData.password}
+                                        onChange={handleChange}
+                                        className="w-full border border-purple-400 rounded-xl focus:border-purple-600 outline-none px-4 py-2 text-sm"
+                                        required
+                                    />
+                                </div>
+
+                                <div className="flex justify-center">
+                                    <button
+                                        onClick={handleSubmit}
+                                        type="submit"
+                                        className="bg-purple-500 text-white py-2 px-6 rounded-lg hover:bg-purple-600"
+                                    >
+                                        Login
+                                    </button>
                                 </div>
                             </div>
 
+                            {/* Right side register link */}
+                            <div className="w-full md:w-1/2 flex items-center justify-center text-center">
+                                <p className="text-sm">
+                                    Don't have an account?{" "}
+                                    <span
+                                        onClick={() => navigate("/register")}
+                                        className="text-purple-600 cursor-pointer hover:text-purple-800"
+                                    >
+                                        Register here
+                                    </span>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </>
     )
 }

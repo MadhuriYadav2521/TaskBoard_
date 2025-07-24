@@ -5,98 +5,98 @@ import mongoose from "mongoose";
 
 
 export const addTask = async (req, res) => {
-    try {
-        const { taskTitle, discription, grade, subject, createdBy, deadlineDate } = req.body
-        console.log(req.body,"req.body");
-        
-        if (!taskTitle || !discription || !grade || !subject || !createdBy || !deadlineDate) return res.status(400).json({ status: 400, message: "All fields are required." })
+  try {
+    const { taskTitle, discription, grade, subject, createdBy, deadlineDate } = req.body
+    console.log(req.body, "req.body");
 
-        const taskFile = req?.files?.taskFileName?.[0]
-        console.log(taskFile, "taskFile");
+    if (!taskTitle || !discription || !grade || !subject || !createdBy || !deadlineDate) return res.status(400).json({ status: 400, message: "All fields are required." })
 
-        const taskFileName = taskFile ? taskFile?.filename : ""
-        console.log(taskFileName, "taskFileName");
+    const taskFile = req?.files?.taskFileName?.[0]
+    console.log(taskFile, "taskFile");
 
-        const newTask = new Tasks({
-            taskTitle, discription, grade, subject, taskFileName, createdBy, deadlineDate
-        })
-        await newTask.save()
+    const taskFileName = taskFile ? taskFile?.filename : ""
+    console.log(taskFileName, "taskFileName");
 
-        const fetchStudents = await Users.find({grade : grade, subjects: {$in: subject}}).exec();
-        console.log(fetchStudents,"fetchStudents");
+    const newTask = new Tasks({
+      taskTitle, discription, grade, subject, taskFileName, createdBy, deadlineDate
+    })
+    await newTask.save()
 
-        const assignedToList = fetchStudents.map(s =>({
-            studentId: s._id,
-            submittedAt: null,
-            submissionFile: "",
-            status: "Pending",
-            isOpened: false
-        }))
+    const fetchStudents = await Users.find({ grade: grade, subjects: { $in: subject } }).exec();
+    console.log(fetchStudents, "fetchStudents");
 
-        const addToSubmissionTable = new TaskSubmissions({
-            taskId: newTask._id,
-            createdBy: createdBy,
-            assignedTo: assignedToList
-        })
+    const assignedToList = fetchStudents.map(s => ({
+      studentId: s._id,
+      submittedAt: null,
+      submissionFile: "",
+      status: "Pending",
+      isOpened: false
+    }))
 
-        await addToSubmissionTable.save()
-        
+    const addToSubmissionTable = new TaskSubmissions({
+      taskId: newTask._id,
+      createdBy: createdBy,
+      assignedTo: assignedToList
+    })
 
-        return res.status(200).json({ status: 200, message: "Task created.", newTask, assignedToList, addToSubmissionTable })
+    await addToSubmissionTable.save()
 
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({ status: 500, message: "Internal server error." })
 
-    }
+    return res.status(200).json({ status: 200, message: "Task created.", newTask, assignedToList, addToSubmissionTable })
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: 500, message: "Internal server error." })
+
+  }
 }
 
 
 export const getAllTask = async (req, res) => {
-    try {
-        const {
-            userId,
-            taskTitle,
-            discription,
-            grade,
-            subject,
-            createdAt,
-            deadlineDate
-        } = req.body;
-        console.log( req.body,"xxxxxx");
-        
+  try {
+    const {
+      userId,
+      taskTitle,
+      discription,
+      grade,
+      subject,
+      createdAt,
+      deadlineDate
+    } = req.body;
+    console.log(req.body, "xxxxxx");
 
-        if (!userId)
-            return res.status(400).json({ status: 400, message: "User id required.", success: false });
 
-        const query = { createdBy: userId };
+    if (!userId)
+      return res.status(400).json({ status: 400, message: "User id required.", success: false });
 
-        // Dynamically add filters if they are provided and not empty
-        if (taskTitle) query.taskTitle = { $regex: taskTitle, $options: 'i' };
-        if (discription) query.discription = { $regex: discription, $options: 'i' };
-        if (grade) query.grade = grade;
+    const query = { createdBy: userId };
 
-        if (subject) {
-            if (Array.isArray(subject) && subject.length > 0) {
-                query.subject = { $in: subject };
-            }
-        }
+    // Dynamically add filters if they are provided and not empty
+    if (taskTitle) query.taskTitle = { $regex: taskTitle, $options: 'i' };
+    if (discription) query.discription = { $regex: discription, $options: 'i' };
+    if (grade) query.grade = grade;
 
-        if (createdAt) query.createdAt = { $gte: new Date(createdAt) };
-        if (deadlineDate) query.deadlineDate = { $lte: new Date(deadlineDate) };
-
-        console.log(query,"query");
-        
-        const tasks = await Tasks.find(query).sort({ createdAt: -1 });
-
-        if (!tasks || tasks.length === 0) return res.status(200).json({ status: 200,  success: false, message: "No matching filter tasks found.", });
-
-        return res.status(200).json({ status: 200, message: "Tasks fetched.", tasks, success: true });
-
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ status: 500, message: "Internal server error." });
+    if (subject) {
+      if (Array.isArray(subject) && subject.length > 0) {
+        query.subject = { $in: subject };
+      }
     }
+
+    if (createdAt) query.createdAt = { $gte: new Date(createdAt) };
+    if (deadlineDate) query.deadlineDate = { $lte: new Date(deadlineDate) };
+
+    console.log(query, "query");
+
+    const tasks = await Tasks.find(query).sort({ createdAt: -1 });
+
+    if (!tasks || tasks.length === 0) return res.status(200).json({ status: 200, success: false, message: "No matching filter tasks found.", });
+
+    return res.status(200).json({ status: 200, message: "Tasks fetched.", tasks, success: true });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ status: 500, message: "Internal server error." });
+  }
 };
 
 
@@ -121,13 +121,19 @@ export const fetchSubmissionsByTeacher = async (req, res) => {
       { $unwind: "$taskDetails" },
       { $unwind: "$assignedTo" },
       {
+        $addFields: {
+          studentObjId: { $toObjectId: "$assignedTo.studentId" }
+        }
+      },
+      {
         $lookup: {
           from: "users",
-          localField: "assignedTo.studentId",
+          localField: "studentObjId",
           foreignField: "_id",
           as: "student"
         }
-      },
+      }
+      ,
       { $unwind: "$student" },
       {
         $match: {
@@ -138,13 +144,14 @@ export const fetchSubmissionsByTeacher = async (req, res) => {
         $project: {
           taskId: 1,
           taskTitle: "$taskDetails.taskTitle",
-          discription: "$taskDetails.discription",  
-          createdAt: "$taskDetails.createdAt",  
+          discription: "$taskDetails.discription",
+          createdAt: "$taskDetails.createdAt",
           deadlineDate: "$taskDetails.deadlineDate",
           grade: "$taskDetails.grade",
           subject: "$taskDetails.subject",
           taskFileName: "$taskDetails.taskFileName",
           studentName: { $concat: ["$student.fName", " ", "$student.lName"] },
+          studentId: "$student._id",
           studentEmail: "$student.email",
           studentProfileImg: "$student.profileImg",
           submissionFile: "$assignedTo.submissionFile",
@@ -166,6 +173,7 @@ export const fetchSubmissionsByTeacher = async (req, res) => {
           submissions: {
             $push: {
               studentName: "$studentName",
+              studentId: "$studentId",
               studentEmail: "$studentEmail",
               studentProfileImg: "$studentProfileImg",
               submissionFile: "$submissionFile",
@@ -195,6 +203,28 @@ export const fetchSubmissionsByTeacher = async (req, res) => {
   }
 };
 
+export const addMark = async (req, res) => {
+  try {
+    const { taskId, studentId, status } = req.body
+    if (!taskId || !studentId || !status) return res.status(200).json({ status: 200, message: "Task id, studentID, status is required", success: false })
 
+    const studentObjId = new mongoose.Types.ObjectId(studentId)
+
+    const updateStatus = await TaskSubmissions.findOneAndUpdate(
+      { taskId: taskId, "assignedTo.studentId": studentObjId },
+      { $set: { "assignedTo.$.status": status } },
+      { new: true }).exec()
+
+    return res.status(200).json({ status: 200, message: "Task marked successfully.", success: true })
+
+  } catch (error) {
+    console.error("Error:", error);
+    return res.status(500).json({
+      status: 500,
+      message: "Internal server error",
+      success: false
+    });
+  }
+}
 
 

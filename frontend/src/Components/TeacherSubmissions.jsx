@@ -9,7 +9,6 @@ const TeacherSubmissions = () => {
     const [taskData, setTaskData] = useState([])
     const [selectedTask, setSelectedTask] = useState(null)
     const [selectedStudent, setselectedStudent] = useState(null)
-    const [showStatusModel, setShowStatusModel] = useState(false)
 
     const getTaskData = async () => {
         try {
@@ -39,13 +38,42 @@ const TeacherSubmissions = () => {
     console.log(selectedTask, "selectedTask");
 
     const handleAddMarking = (student) => {
-        setShowStatusModel(true)
         setselectedStudent(student)
     }
 
     const closeStatusModel = () => {
-        setShowStatusModel(false)
         setselectedStudent(null)
+    }
+
+    const AddMark = async (status) => {
+        try {
+            const data = {
+                teacherId: userData?._id,
+                taskId: selectedTask?._id,
+                studentId: selectedStudent?.studentId,
+                status: status
+            }
+            const response = await axios.post('http://localhost:8000/addMark', data)
+            if (response.data.success == true) {
+                alert("Task remark added.")
+                await getTaskData()
+
+                // Refresh selectedTask with updated data from taskData
+                setSelectedTask(prev => ({
+                    ...prev,
+                    submissions: prev.submissions.map(s =>
+                        s.studentId === selectedStudent?.studentId ? { ...s, status } : s
+                    )
+                }));
+                setselectedStudent(null)
+            } else {
+                alert(response.data.message)
+            }
+        } catch (error) {
+            console.log(error);
+            alert("Internal server error.")
+
+        }
     }
 
 
@@ -154,7 +182,7 @@ const TeacherSubmissions = () => {
                                                 <td className="border-2 border-gray-300 p-3">{t.studentEmail}</td>
                                                 <td className="border-2 border-gray-300 p-3">{t.submissionFile}</td>
                                                 <td className="border-2 border-gray-300 p-3">{t.submittedAt !== null && new Date(t.submittedAt).toLocaleDateString()}</td>
-                                                <td className="border-2 border-gray-300 p-3">{t.status}</td>
+                                                <td className={`border-2 border-gray-300 p-3 ${t.status == "Complete" ? "text-blue-700" : t.status == "Accepted" ? "text-green-700" : "text-red-500"}`}>{t.status}</td>
                                                 <td className="border-2 border-gray-300 p-3">
                                                     <button
                                                         className='outline-none bg-cyan-200 py-2 px-4 cursor-pointer hover:bg-cyan-600 text-nowrap'
@@ -178,8 +206,10 @@ const TeacherSubmissions = () => {
                         <div className='text-center flex justify-center items-center flex-col'>
                             <p className='text-[18px] font-bold mb-4'>Review Submission for {selectedStudent.studentName}</p>
                             <div>
-                                <button className='capitalize outline-none cursor-pointer py-2 px-4 bg-green-500 hover:bg-green-700 text-white tex-[16px] mr-7 mb-4'>accept</button>
-                                <button className='capitalize outline-none cursor-pointer py-2 px-4 bg-red-500 hover:bg-red-700 text-white tex-[16px]'>reject</button>
+                                <button className='capitalize outline-none cursor-pointer py-2 px-4 bg-green-500 hover:bg-green-700 text-white tex-[16px] mr-7 mb-4'
+                                    onClick={() => AddMark("Accepted")}>accept</button>
+                                <button className='capitalize outline-none cursor-pointer py-2 px-4 bg-red-500 hover:bg-red-700 text-white tex-[16px]'
+                                    onClick={() => AddMark("Rejected")}>reject</button>
                             </div>
                         </div>
                     </div>

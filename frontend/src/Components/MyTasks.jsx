@@ -120,7 +120,9 @@ const MyTasks = () => {
                                     </tr>
                                     <tr className="border-2 border-gray-200">
                                         <td className="px-4 border-2 py-3 font-semibold text-gray-700">Status</td>
-                                        <td className="px-4 py-3 text-red-500">{selectedTask.assignedTo[0].status}</td>
+                                        <td className={`px-4 py-3 ${selectedTask.assignedTo[0].status == "Complete" ? "text-blue-700" : 
+                                            selectedTask.assignedTo[0].status == "Accepted" ? "text-green-700" : "text-red-500"}`}>
+                                                {selectedTask.assignedTo[0].status}</td>
                                     </tr>
                                     
                                     {selectedTask.assignedTo[0].status !== "Overdue" &&

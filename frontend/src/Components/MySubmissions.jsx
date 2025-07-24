@@ -61,7 +61,9 @@ const MySubmissions = () => {
                                             <td className="border-2 border-gray-300 p-3">{new Date(t.taskDetails.createdAt).toLocaleDateString()}</td>
                                             <td className="border-2 border-gray-300 p-3">{new Date(t.taskDetails.deadlineDate).toLocaleDateString()}</td>
                                             <td className="border-2 border-gray-300 p-3 ">{new Date(t.assignedTo[0].submittedAt).toLocaleDateString()}</td>
-                                            <td className="border-2 border-gray-300 p-3 text-green-600">{t.assignedTo[0].status}</td>
+                                            <td className={`border-2 border-gray-300 p-3 ${t.assignedTo[0].status == "Complete" ? "text-blue-700" :
+                                                t.assignedTo[0].status == "Accepted" ? "text-green-700" : "text-red-500"}`}>
+                                                {t.assignedTo[0].status}</td>
                                         </tr>
                                     ))}
                                 </>

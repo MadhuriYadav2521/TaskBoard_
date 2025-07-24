@@ -6,7 +6,7 @@ import dotenv from 'dotenv'
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import userRouter from './routes/userRoute.js'
-import Chats from './models/chatModel.js'
+import Chats from './models/chatmodel.js'
 import chatRouter from './routes/chatRoute.js'
 import path from "path";
 import { fileURLToPath } from 'url';

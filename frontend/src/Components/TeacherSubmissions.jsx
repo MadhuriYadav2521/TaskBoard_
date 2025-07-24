@@ -15,7 +15,7 @@ const TeacherSubmissions = () => {
             const data = {
                 teacherId: userData?._id
             }
-            const response = await axios.post('http://localhost:8000/fetchSubmissionsByTeacher', data)
+            const response = await axios.post('https://taskboard-sewf.onrender.com/fetchSubmissionsByTeacher', data)
             if (response.data.success == true) {
                 setTaskData(response.data.data)
             } else {
@@ -53,7 +53,7 @@ const TeacherSubmissions = () => {
                 studentId: selectedStudent?.studentId,
                 status: status
             }
-            const response = await axios.post('http://localhost:8000/addMark', data)
+            const response = await axios.post('https://taskboard-sewf.onrender.com/addMark', data)
             if (response.data.success == true) {
                 alert("Task remark added.")
                 await getTaskData()

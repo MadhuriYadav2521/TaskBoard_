@@ -14,7 +14,7 @@ const TeacherDashboard = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.post('http://localhost:8000/fetchUsers')
+            const response = await axios.post('https://taskboard-sewf.onrender.com/fetchUsers')
             if (response.data.status == 200) {
                 const user = response.data.users.find((f) => f._id == userData?._id)
                 setCurrentUser(user)

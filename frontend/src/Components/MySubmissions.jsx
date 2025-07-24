@@ -12,7 +12,7 @@ const MySubmissions = () => {
             const data = {
                 studentId: userData?._id
             }
-            const response = await axios.post('http://localhost:8000/fetchTaskByStudentId', data)
+            const response = await axios.post('https://taskboard-sewf.onrender.com/fetchTaskByStudentId', data)
             if (response.data.success == true) {
                 setTaskData(response.data.completedTasks)
             } else {

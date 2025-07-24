@@ -47,7 +47,7 @@ const Navbar = () => {
 
     const fetchUser = async () => {
         try {
-            const response = await axios.post('http://localhost:8000/fetchUsers')
+            const response = await axios.post('https://taskboard-sewf.onrender.com/fetchUsers')
             if (response.data.status == 200) {
                 const user = response.data.users.find((f) => f._id == userData?._id)
                 setCurrentUser(user)
@@ -94,7 +94,7 @@ const Navbar = () => {
                     <ul className="" ref={dropdownRef}>
                         <li className="cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
                             <div className="w-10 h-10 bg-gray-300 rounded-full cursor-pointer border-2 border-gray-600 overflow-hidden ">
-                                <img src={currentUser?.profileImg ? `http://localhost:8000/uploads/${currentUser?.profileImg}` : 'https://cdn-icons-png.flaticon.com/512/7915/7915522.png'} className="object-cover w-10 h-10 rounded-full" alt="" />
+                                <img src={currentUser?.profileImg ? `https://taskboard-sewf.onrender.com/uploads/${currentUser?.profileImg}` : 'https://cdn-icons-png.flaticon.com/512/7915/7915522.png'} className="object-cover w-10 h-10 rounded-full" alt="" />
                             </div>
 
                         </li>
@@ -129,7 +129,7 @@ const Navbar = () => {
                         <div className="flex justify-between items-center">
 
                             <div className="m-auto w-[100px] h-[100px] rounded-full border-2 border-gray-300 overflow-hidden">
-                                <img src={currentUser?.profileImg ? `http://localhost:8000/uploads/${currentUser?.profileImg}` : 'https://cdn-icons-png.flaticon.com/512/7915/7915522.png'} className="object-cover w-full h-full rounded-full" alt="" />
+                                <img src={currentUser?.profileImg ? `https://taskboard-sewf.onrender.com/uploads/${currentUser?.profileImg}` : 'https://cdn-icons-png.flaticon.com/512/7915/7915522.png'} className="object-cover w-full h-full rounded-full" alt="" />
                             </div>
                             <div className=" space-y-2">
                                 <p><span className="font-bold">Name:</span> {currentUser?.fName} {currentUser?.lName}</p>

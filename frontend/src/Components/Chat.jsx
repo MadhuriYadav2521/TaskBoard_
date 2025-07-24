@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { io } from 'socket.io-client';
 import { setCount } from '../Redux/chatSlice';
 
-const socket = io('http://localhost:8000'); // adjust to your server
+const socket = io('https://taskboard-sewf.onrender.com'); // adjust to your server
 
 const Chat = () => {
     const dispatch = useDispatch()
@@ -30,7 +30,7 @@ const Chat = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.post('http://localhost:8000/fetchUsers')
+            const response = await axios.post('https://taskboard-sewf.onrender.com/fetchUsers')
             if (response?.data?.status == 200) {
                 const teacherList = response.data.users.filter((f) => f._id !== userData._id)
                 const currentUser = response.data.users.find((f) => f._id === userData._id)
@@ -101,7 +101,7 @@ const Chat = () => {
                 senderId: currentUser?._id,
                 receiverId: selectedUser?._id
             }
-            const response = await axios.post('http://localhost:8000/getChat', data)
+            const response = await axios.post('https://taskboard-sewf.onrender.com/getChat', data)
             if (response?.data?.status == 200) {
                 const mappedMessages = response.data.messages.map((msg) => ({
                     text: msg.message,
@@ -131,7 +131,7 @@ const Chat = () => {
 
     const fetchRecentChats = async () => {
         try {
-            const res = await axios.post("http://localhost:8000/getRecentChats", { userId: userData._id });
+            const res = await axios.post("https://taskboard-sewf.onrender.com/getRecentChats", { userId: userData._id });
             const recent = res?.data?.chats;
 
             // 🛡️ Skip if data isn't ready
@@ -209,7 +209,7 @@ const Chat = () => {
                                 <div className="flex items-center space-x-2">
                                     <div className="w-10 h-10 bg-gray-300 rounded-full">
                                         <div className="w-10 h-10 bg-gray-300 rounded-full cursor-pointer border-2 border-gray-600 overflow-hidden ">
-                                            <img src={u?.profileImg ? `http://localhost:8000/uploads/${u?.profileImg}` : 'https://cdn-icons-png.flaticon.com/512/7915/7915522.png'} className="object-cover w-10 h-10 rounded-full" alt="" />
+                                            <img src={u?.profileImg ? `https://taskboard-sewf.onrender.com/uploads/${u?.profileImg}` : 'https://cdn-icons-png.flaticon.com/512/7915/7915522.png'} className="object-cover w-10 h-10 rounded-full" alt="" />
                                         </div>
 
                                     </div>
@@ -243,7 +243,7 @@ const Chat = () => {
                         <div className="flex items-center space-x-4 mb-4 justify-between">
                             <div className='flex items-center gap-3 '>
                                 <div className="w-10 h-10 bg-gray-300 rounded-full border-2 border-gray-600 overflow-hidden  ">
-                                    <img src={selectedUser?.profileImg ? `http://localhost:8000/uploads/${selectedUser?.profileImg}` : 'https://cdn-icons-png.flaticon.com/512/7915/7915522.png'} className="object-cover w-10 h-10 rounded-full" alt="" />
+                                    <img src={selectedUser?.profileImg ? `https://taskboard-sewf.onrender.com/uploads/${selectedUser?.profileImg}` : 'https://cdn-icons-png.flaticon.com/512/7915/7915522.png'} className="object-cover w-10 h-10 rounded-full" alt="" />
                                 </div>
 
                                 <h2 className="text-lg font-semibold">{`${selectedUser.fName} ${selectedUser.lName}`}</h2>

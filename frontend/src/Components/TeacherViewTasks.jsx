@@ -21,7 +21,7 @@ const TeacherViewTasks = () => {
 
     const getTaskData = async () => {
         try {
-            const response = await axios.post('http://localhost:8000/getAllTasks', filters)
+            const response = await axios.post('https://taskboard-sewf.onrender.com/getAllTasks', filters)
             console.log(response.data.success, "bbbbbbbbbbbbbbbbbbb");
 
             if (response.data.success == true) {

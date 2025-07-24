@@ -53,7 +53,7 @@ const Home = () => {
             formData.append("grade", userData.grade);
             userData.subjects.forEach(sub => { formData.append("subjects[]", sub) })
 
-            const response = await axios.post('http://localhost:8000/registerUser', formData)
+            const response = await axios.post('https://taskboard-sewf.onrender.com/registerUser', formData)
             if (response.status == 200) {
                 alert("Registration successfull")
                 if (fileInputRef.current) {

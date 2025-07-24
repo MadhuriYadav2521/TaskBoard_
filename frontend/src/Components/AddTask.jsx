@@ -27,7 +27,7 @@ const AddTask = () => {
     const getCurrentUser = async () => {
         try {
             const data = { userId: userData?._id }
-            const response = await axios.post('http://localhost:8000/currentUser', data)
+            const response = await axios.post('https://taskboard-sewf.onrender.com/currentUser', data)
             if (response.data.status == 200) {
                 console.log(response.data.user, "nnnn");
                 setSubjects(response?.data?.user?.subjects)
@@ -74,7 +74,7 @@ const AddTask = () => {
             console.log(formData, "formData");
 
 
-            const response = await axios.post('http://localhost:8000/addTask', formData)
+            const response = await axios.post('https://taskboard-sewf.onrender.com/addTask', formData)
             console.log(response.data, "eeeeeeeeeeeeee");
 
             if (response.status == 200) {

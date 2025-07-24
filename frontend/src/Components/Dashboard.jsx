@@ -17,7 +17,7 @@ const Dashboard = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.post('http://localhost:8000/fetchUsers')
+            const response = await axios.post('https://taskboard-sewf.onrender.com/fetchUsers')
             if (response.data.status == 200) {
                 const user = response.data.users.find((f) => f._id == userData?._id)
                 setCurrentUser(user)
@@ -43,7 +43,7 @@ const Dashboard = () => {
             const data = {
                 studentId: userData?._id
             }
-            const response = await axios.post('http://localhost:8000/fetchNewTask', data)
+            const response = await axios.post('https://taskboard-sewf.onrender.com/fetchNewTask', data)
 
             if (response.data.status == 200) {
                 setNewTasks(response?.data?.tasks)
@@ -63,7 +63,7 @@ const Dashboard = () => {
                 studentId: userData?._id,
                 taskId : taskId
             }
-            const response = await axios.post('http://localhost:8000/markAsReadTask', data)
+            const response = await axios.post('https://taskboard-sewf.onrender.com/markAsReadTask', data)
             console.log(response.data,"lllllllll");
             
             if (response.data.status == 200) {

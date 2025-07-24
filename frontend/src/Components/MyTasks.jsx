@@ -21,7 +21,7 @@ const MyTasks = () => {
             const data = {
                 studentId: userData?._id
             }
-            const response = await axios.post('http://localhost:8000/fetchTaskByStudentId', data)
+            const response = await axios.post('https://taskboard-sewf.onrender.com/fetchTaskByStudentId', data)
             if (response.data.success == true) {
                 setTaskData(response.data.activeTasks)
             } else {
@@ -60,7 +60,7 @@ const MyTasks = () => {
             formData.append("taskId", selectedTask?.taskId);
             formData.append("submissionFile", submissionFile);
 
-            const response = await axios.post('http://localhost:8000/submitTask', formData)
+            const response = await axios.post('https://taskboard-sewf.onrender.com/submitTask', formData)
             console.log(response.data, "vvvvvvvvv");
 
             if (response.data.success == true) {

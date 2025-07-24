@@ -20,7 +20,7 @@ const Pagination = () => {
 
     const fetchTeacher = async () => {
         try {
-            const response = await axios.post('http://localhost:8000/fetchUsers')
+            const response = await axios.post('https://taskboard-sewf.onrender.com/fetchUsers')
             if (response.data.status == 200) {
                 const user = response.data.users.find((f) => f._id == userData?._id)
                 setCurrentUser(user)
@@ -39,7 +39,7 @@ const Pagination = () => {
                 pageNo: pageNo,
                 limit: limit
             }
-            const response = await axios.post('http://localhost:8000/fetchUsersByPagination', data)
+            const response = await axios.post('https://taskboard-sewf.onrender.com/fetchUsersByPagination', data)
             if (response.data.status == 200) {
                 setUsers(response.data.users)
                 setTotalPages(response.data.pagination.totalPages)

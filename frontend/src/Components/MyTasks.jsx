@@ -120,31 +120,36 @@ const MyTasks = () => {
                                     </tr>
                                     <tr className="border-2 border-gray-200">
                                         <td className="px-4 border-2 py-3 font-semibold text-gray-700">Status</td>
-                                        <td className={`px-4 py-3 ${selectedTask.assignedTo[0].status == "Complete" ? "text-blue-700" : 
+                                        <td className={`px-4 py-3 ${selectedTask.assignedTo[0].status == "Complete" ? "text-blue-700" :
                                             selectedTask.assignedTo[0].status == "Accepted" ? "text-green-700" : "text-red-500"}`}>
-                                                {selectedTask.assignedTo[0].status}</td>
+                                            {selectedTask.assignedTo[0].status}</td>
                                     </tr>
-                                    
+
                                     {selectedTask.assignedTo[0].status !== "Overdue" &&
                                         <tr className="border-2 border-gray-200">
                                             <td className="px-4 border-2 py-3 font-semibold text-gray-700">Submit Here</td>
-                                            <td className="px-4 py-3 ">
-                                                <input
-                                                    ref={fileRef}
-                                                    type="file"
-                                                    name="taskFileName"
-                                                    className="block w-full cursor-pointer bg-white file:mr-4 file:py-2 file:px-4 file:rounded 
-                                            file:border-0 file:bg-purple-100 file:text-purple-700 hover:file:bg-purple-200"
-                                                    onChange={handleChange}
-                                                />
-                                                <button
-                                                    type="submit"
-                                                    onClick={handleSubmit}
-                                                    className="bg-purple-500 mt-4 text-white font-semibold px-8 py-2 rounded hover:bg-purple-600 transition">
-                                                    Submit
-                                                </button>
+                                            <td className="px-4 py-3">
+                                                <div className="flex flex-col items-start gap-2 w-full">
+                                                    <input
+                                                        ref={fileRef}
+                                                        type="file"
+                                                        name="taskFileName"
+                                                        className="block cursor-pointer bg-white file:mr-4 file:py-2 file:px-4 file:rounded 
+        file:border-0 file:bg-purple-100 file:text-purple-700 hover:file:bg-purple-200"
+                                                        onChange={handleChange}
+                                                    />
+
+                                                    <button
+                                                        type="submit"
+                                                        onClick={handleSubmit}
+                                                        className="bg-purple-500 text-white font-semibold px-6 py-2 rounded hover:bg-purple-600 transition"
+                                                    >
+                                                        Submit
+                                                    </button>
+                                                </div>
                                             </td>
                                         </tr>
+
                                     }
                                 </tbody>
                             </table>

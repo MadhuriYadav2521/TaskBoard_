@@ -122,8 +122,8 @@ const TeacherSubmissions = () => {
                     </div>
                 ) : (
                     <>
-                        <div className="flex justify-between items-center mb-3">
-                            <p className="text-2xl font-semibold">Tasks: {selectedTask.taskTitle}</p>
+                        <div className="flex justify-end items-center mb-3">
+                            {/* <p className="text-2xl font-semibold">Tasks: {selectedTask.taskTitle}</p> */}
                             <button type="submit" className="bg-purple-500 text-white font-semibold px-8 py-2  rounded hover:bg-purple-600 transition" onClick={() => setSelectedTask(null)}>
                                 Back
                             </button>
@@ -198,22 +198,46 @@ const TeacherSubmissions = () => {
                     </>
                 )}
 
-                {selectedStudent &&
-                    <div className='absolute top-1/4 left-2/4 border-2 border-gray-400 bg-white z-40 w-[40%] p-3'>
-                        <div className="flex justify-end items-center mb-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" onClick={() => closeStatusModel()} className='cursor-pointer text-red-600' width="18" height="18" fill="currentColor" viewBox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" /></svg>
-                        </div>
-                        <div className='text-center flex justify-center items-center flex-col'>
-                            <p className='text-[18px] font-bold mb-4'>Review Submission for {selectedStudent.studentName}</p>
-                            <div>
-                                <button className='capitalize outline-none cursor-pointer py-2 px-4 bg-green-500 hover:bg-green-700 text-white tex-[16px] mr-7 mb-4'
-                                    onClick={() => AddMark("Accepted")}>accept</button>
-                                <button className='capitalize outline-none cursor-pointer py-2 px-4 bg-red-500 hover:bg-red-700 text-white tex-[16px]'
-                                    onClick={() => AddMark("Rejected")}>reject</button>
+                {selectedStudent && (
+                    <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-40 px-4">
+                        <div className="w-full max-w-xl bg-white border-2 border-gray-400 rounded-lg p-4 relative">
+                            <div className="flex justify-end mb-3">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    onClick={closeStatusModel}
+                                    className="cursor-pointer text-red-600"
+                                    width="18"
+                                    height="18"
+                                    fill="currentColor"
+                                    viewBox="0 0 384 512"
+                                >
+                                    <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+                                </svg>
+                            </div>
+
+                            <div className="text-center flex flex-col items-center">
+                                <p className="text-lg font-bold mb-4">
+                                    Review Submission for {selectedStudent.studentName}
+                                </p>
+                                <div className="flex flex-col sm:flex-row gap-4">
+                                    <button
+                                        className="capitalize py-2 px-6 bg-green-500 hover:bg-green-700 text-white text-base rounded"
+                                        onClick={() => AddMark("Accepted")}
+                                    >
+                                        accept
+                                    </button>
+                                    <button
+                                        className="capitalize py-2 px-6 bg-red-500 hover:bg-red-700 text-white text-base rounded"
+                                        onClick={() => AddMark("Rejected")}
+                                    >
+                                        reject
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                }
+                )}
+
             </div>
         </>
     )

@@ -160,11 +160,11 @@ const MyTasks = () => {
                 ) : (
                     <>
 
-                        <div className="flex justify-between items-center mb-3">
+                        <div className="flex justify-start items-center mb-3">
                             <p className="text-2xl font-semibold">Tasks</p>
-                            <button type="submit" onClick={() => setShowFilters(true)} className="bg-purple-500 text-white font-semibold px-8 py-2  rounded hover:bg-purple-600 transition">
+                            {/* <button type="submit" onClick={() => setShowFilters(true)} className="bg-purple-500 text-white font-semibold px-8 py-2  rounded hover:bg-purple-600 transition">
                                 Filter
-                            </button>
+                            </button> */}
                         </div>
                         <div className="max-h-[400px] overflow-y-auto ">
                             <table className="min-w-full border-2 border-gray-300 p-3">

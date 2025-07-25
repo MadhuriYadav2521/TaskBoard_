@@ -70,7 +70,7 @@ const Navbar = () => {
         <>
             <div className="bg-purple-600 flex justify-between items-center px-4 sm:px-6 py-3 relative">
                 {/* Logo */}
-                <div className="text-white text-xl font-bold">TaskBoard</div>
+                <div className="text-white text-xl font-bold">StudiPort</div>
 
                 {/* Right Icons */}
                 <div className="flex items-center space-x-4 relative">

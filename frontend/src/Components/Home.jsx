@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
+import Loading from "./Loading";
 
 const Home = () => {
     const navigate = useNavigate()
     const fileInputRef = useRef(null);
     const [userData, setUserData] = useState({
-        fName: "", lName: "", email: "", password: "", role: "", phone: "", profileImg: "", grade: "", 
+        fName: "", lName: "", email: "", password: "", role: "", phone: "", profileImg: "", grade: "",
     })
     const grades = [
         { name: 1, value: 1 },
@@ -17,6 +18,9 @@ const Home = () => {
         { name: 5, value: 5 },
     ]
     const subjectsList = ["Mathematics", "Science", "English", "Social Studies", "Art"];
+
+    const [loading, setLoading] = useState(false)
+
     const handleChange = (e) => {
         const { name, value, files, type, checked } = e.target
         // if (type === "checkbox" && name === "subjects") {
@@ -24,7 +28,7 @@ const Home = () => {
         //     setUserData({ ...userData, subjects: subjectArray })
 
         // } else
-             if (type == "file") {
+        if (type == "file") {
             setUserData((prev) => ({ ...prev, [name]: files[0] }))
         } else {
             setUserData((prev) => ({ ...prev, [name]: value }));
@@ -35,13 +39,14 @@ const Home = () => {
     const handleSubmit = async () => {
         try {
             if (!userData.fName || !userData.lName || !userData.email || !userData.password || !userData.phone || !userData.role
-                || !userData.profileImg ) {
+                || !userData.profileImg) {
                 return alert("All field are required.")
             }
             if (userData.role == 'student' && !userData.grade) {
 
                 return alert("Please select grade.")
             }
+            setLoading(true)
             const formData = new FormData();
 
             formData.append("fName", userData.fName);
@@ -56,18 +61,21 @@ const Home = () => {
 
             const response = await axios.post('https://taskboard-sewf.onrender.com/registerUser', formData)
             if (response.status == 200) {
+                setLoading(false)
                 alert("Registration successfull")
                 if (fileInputRef.current) {
                     fileInputRef.current.value = null;
                 }
-                setUserData({ fName: "", lName: "", email: "", password: "", role: "", phone: "", profileImg: "", grade: "",  })
+                setUserData({ fName: "", lName: "", email: "", password: "", role: "", phone: "", profileImg: "", grade: "", })
                 navigate('/')
             } else {
+                setLoading(false)
                 alert("Error in register.")
             }
 
 
         } catch (error) {
+            setLoading(false)
             console.log(error);
             alert("Internal server error.")
 
@@ -78,9 +86,10 @@ const Home = () => {
 
     return (
         <>
+            {loading && <Loading />}
             <div className="bg-purple-400 min-h-screen flex justify-center items-center px-4 py-6 overflow-y-auto">
                 <div className="w-full md:w-[90%] lg:w-[60%] rounded-tl-[10%] md:rounded-tl-[30%] rounded-br-[10%] md:rounded-br-[30%] shadow-lg bg-white overflow-hidden">
-                            <h1 className="text-purple-700 text-center font-mono text-2xl mt-4">Register</h1>
+                    <h1 className="text-purple-700 text-center font-mono text-2xl mt-4">Register</h1>
 
                     <div className="flex flex-col md:flex-row">
 
@@ -163,8 +172,8 @@ const Home = () => {
                                 )}
 
                                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                                <label className="sm:mr-2">Phone</label>
-                                <input
+                                    <label className="sm:mr-2">Phone</label>
+                                    <input
                                         type="number"
                                         name="phone"
                                         value={userData.phone}
@@ -208,25 +217,25 @@ const Home = () => {
 
 
                     </div>
-                    
-                        <div className="flex flex-col items-center mb-4">
-                            <button
-                                onClick={handleSubmit}
-                                type="submit"
-                                className="bg-purple-500 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition"
+
+                    <div className="flex flex-col items-center mb-4">
+                        <button
+                            onClick={handleSubmit}
+                            type="submit"
+                            className="bg-purple-500 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition"
+                        >
+                            Register
+                        </button>
+                        <p className="mt-4 text-sm">
+                            Already have account?{" "}
+                            <span
+                                onClick={() => navigate('/')}
+                                className="text-purple-700 cursor-pointer hover:text-purple-800"
                             >
-                                Register
-                            </button>
-                            <p className="mt-4 text-sm">
-                                Already have account?{" "}
-                                <span
-                                    onClick={() => navigate('/')}
-                                    className="text-purple-700 cursor-pointer hover:text-purple-800"
-                                >
-                                    Log in here
-                                </span>
-                            </p>
-                        </div>
+                                Log in here
+                            </span>
+                        </p>
+                    </div>
                 </div>
             </div>
 

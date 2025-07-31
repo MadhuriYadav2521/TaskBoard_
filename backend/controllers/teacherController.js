@@ -14,7 +14,8 @@ export const addTask = async (req, res) => {
     const taskFile = req?.files?.taskFileName?.[0]
     console.log(taskFile, "taskFile");
 
-    const taskFileName = taskFile ? taskFile?.filename : ""
+
+    const taskFileName = taskFile ? taskFile.path : ""  // cloudinary url
     console.log(taskFileName, "taskFileName");
 
     const newTask = new Tasks({

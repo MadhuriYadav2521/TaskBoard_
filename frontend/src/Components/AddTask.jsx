@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
+import Loading from "./Loading";
 
 const AddTask = () => {
     const [taskData, setTaskData] = useState({
@@ -21,21 +22,26 @@ const AddTask = () => {
         { name: 4, value: 4 },
         { name: 5, value: 5 },
     ]
-    console.log(userData,"hgggg");
-    
+    console.log(userData, "hgggg");
+    const [loading, setLoading] = useState(false)
+
 
     const getCurrentUser = async () => {
         try {
+            setLoading(true)
             const data = { userId: userData?._id }
             const response = await axios.post('https://taskboard-sewf.onrender.com/currentUser', data)
             if (response.data.status == 200) {
+                setLoading(false)
                 console.log(response.data.user, "nnnn");
                 setSubjects(response?.data?.user?.subjects)
                 setTaskData({ ...taskData, createdBy: response?.data?.user?._id })
             } else {
+                setLoading(false)
                 alert("Error in fetching current user.")
             }
         } catch (error) {
+            setLoading(false)
             console.log(error);
             alert("Internal server error.")
 
@@ -59,10 +65,13 @@ const AddTask = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            
+
+
+
             if (!taskData.taskTitle || !taskData.discription || !taskData.grade || !taskData.subject || !taskData.taskFileName || !taskData.deadlineDate) {
                 return alert("All fields are required.")
             }
+            setLoading(true)
             const formData = new FormData()
             formData.append("taskTitle", taskData.taskTitle)
             formData.append("discription", taskData.discription)
@@ -78,6 +87,7 @@ const AddTask = () => {
             console.log(response.data, "eeeeeeeeeeeeee");
 
             if (response.status == 200) {
+                setLoading(false)
                 alert("Task added successfully.")
                 setTaskData({
                     taskTitle: "",
@@ -88,13 +98,15 @@ const AddTask = () => {
                     createdBy: "",
                     deadlineDate: ""
                 })
-                if(fileRef.current){
+                if (fileRef.current) {
                     fileRef.current.value = null
                 }
             } else {
+                setLoading(false)
                 alert("Error in adding task.")
             }
         } catch (error) {
+            setLoading(false)
             console.log(error);
             alert("Internal server error.")
 
@@ -103,6 +115,7 @@ const AddTask = () => {
 
     return (
         <>
+        {loading && <Loading />}
             <div className=" flex items-center justify-center w-full">
                 <form className=" w-full px-9 pt-3 bg-white shadow-md  ">
                     <h2 className="text-2xl font-bold text-center mb-8 mt-4 text-purple-700">Add Task</h2>
@@ -147,13 +160,13 @@ const AddTask = () => {
                                 <div className="space-y-2">
                                     {subjects?.map((subject) => (
                                         <div key={subject} className="flex items-center">
-                                            <input 
-                                            type="radio" 
-                                            name="subject" 
-                                            value={subject} 
-                                            className="mr-2 accent-purple-600 border-purple-400 rounded focus:ring-purple-300" 
-                                            onChange={handleChange}
-                                            checked={taskData?.subject == subject}
+                                            <input
+                                                type="radio"
+                                                name="subject"
+                                                value={subject}
+                                                className="mr-2 accent-purple-600 border-purple-400 rounded focus:ring-purple-300"
+                                                onChange={handleChange}
+                                                checked={taskData?.subject == subject}
                                             />
                                             <label className="text-gray-700">{subject}</label>
                                         </div>

@@ -7,7 +7,7 @@ const Home = () => {
     const navigate = useNavigate()
     const fileInputRef = useRef(null);
     const [userData, setUserData] = useState({
-        fName: "", lName: "", email: "", password: "", role: "", phone: "", profileImg: "", grade: "", subjects: []
+        fName: "", lName: "", email: "", password: "", role: "", phone: "", profileImg: "", grade: "", 
     })
     const grades = [
         { name: 1, value: 1 },
@@ -19,11 +19,12 @@ const Home = () => {
     const subjectsList = ["Mathematics", "Science", "English", "Social Studies", "Art"];
     const handleChange = (e) => {
         const { name, value, files, type, checked } = e.target
-        if (type === "checkbox" && name === "subjects") {
-            const subjectArray = checked ? [...userData.subjects, value] : userData.subjects.filter((f) => f !== value)
-            setUserData({ ...userData, subjects: subjectArray })
+        // if (type === "checkbox" && name === "subjects") {
+        //     const subjectArray = checked ? [...userData.subjects, value] : userData.subjects.filter((f) => f !== value)
+        //     setUserData({ ...userData, subjects: subjectArray })
 
-        } else if (type == "file") {
+        // } else
+             if (type == "file") {
             setUserData((prev) => ({ ...prev, [name]: files[0] }))
         } else {
             setUserData((prev) => ({ ...prev, [name]: value }));
@@ -34,7 +35,7 @@ const Home = () => {
     const handleSubmit = async () => {
         try {
             if (!userData.fName || !userData.lName || !userData.email || !userData.password || !userData.phone || !userData.role
-                || !userData.profileImg || !userData.subjects) {
+                || !userData.profileImg ) {
                 return alert("All field are required.")
             }
             if (userData.role == 'student' && !userData.grade) {
@@ -51,7 +52,7 @@ const Home = () => {
             formData.append("role", userData.role);
             formData.append("profileImg", userData.profileImg);
             formData.append("grade", userData.grade);
-            userData.subjects.forEach(sub => { formData.append("subjects[]", sub) })
+            // userData.subjects.forEach(sub => { formData.append("subjects[]", sub) })
 
             const response = await axios.post('https://taskboard-sewf.onrender.com/registerUser', formData)
             if (response.status == 200) {
@@ -59,7 +60,7 @@ const Home = () => {
                 if (fileInputRef.current) {
                     fileInputRef.current.value = null;
                 }
-                setUserData({ fName: "", lName: "", email: "", password: "", role: "", phone: "", profileImg: "", grade: "", subjects: [] })
+                setUserData({ fName: "", lName: "", email: "", password: "", role: "", phone: "", profileImg: "", grade: "",  })
                 navigate('/')
             } else {
                 alert("Error in register.")
@@ -91,7 +92,7 @@ const Home = () => {
                                 { label: "Last Name", name: "lName", type: "text" },
                                 { label: "Email", name: "email", type: "email" },
                                 { label: "Password", name: "password", type: "password" },
-                                { label: "Phone", name: "phone", type: "number" },
+                                // { label: "Phone", name: "phone", type: "number" },
                             ].map(({ label, name, type }) => (
                                 <div key={name} className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3 gap-1">
                                     <label className="sm:mr-2">{label}:</label>
@@ -100,7 +101,7 @@ const Home = () => {
                                         name={name}
                                         value={userData[name]}
                                         onChange={handleChange}
-                                        className="w-full sm:w-[66%] border border-purple-400 rounded-xl px-4 py-1 text-sm outline-none focus:border-purple-600"
+                                        className={`w-full sm:w-[66%] border border-purple-400 rounded-xl px-4 py-1 text-sm outline-none focus:border-purple-600 ${(name === 'fName' || name === 'lName') ? "capitalize" : ""}`}
                                         required
                                     />
                                 </div>
@@ -161,8 +162,20 @@ const Home = () => {
                                     </div>
                                 )}
 
+                                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                                <label className="sm:mr-2">Phone</label>
+                                <input
+                                        type="number"
+                                        name="phone"
+                                        value={userData.phone}
+                                        onChange={handleChange}
+                                        className={`w-full sm:w-[66%] border border-purple-400 rounded-xl px-4 py-1 text-sm outline-none focus:border-purple-600 `}
+                                        required
+                                    />
+                                </div>
+
                                 {/* Subjects */}
-                                <div>
+                                {/* <div>
                                     <label>Subjects:</label>
                                     <div className="grid grid-cols-2 gap-x-4 pl-4 mt-1">
                                         {subjectsList.map((subject) => (
@@ -179,7 +192,7 @@ const Home = () => {
                                             </label>
                                         ))}
                                     </div>
-                                </div>
+                                </div> */}
 
                                 {/* Image */}
                                 {/* <div className="hidden sm:block">

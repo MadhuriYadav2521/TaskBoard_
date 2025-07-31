@@ -57,7 +57,10 @@ const MySubmissions = () => {
                                             <td className="border-2 border-gray-300 p-3">{i + 1}</td>
                                             <td className="border-2 border-gray-300 p-3">{t.taskDetails.taskTitle}</td>
                                             <td className="border-2 border-gray-300 p-3">{t.taskDetails.subject}</td>
-                                            <td className="text-ellipsis border-2 border-gray-300 p-3">{t.assignedTo[0].submissionFile}</td>
+                                            <td className="text-ellipsis border-2 border-gray-300 p-3">
+                                                {/* {t.assignedTo[0].submissionFile} */}
+                                                 <a href={`https://docs.google.com/viewer?url=${t.assignedTo[0].submissionFile}&embedded=true`} target="_blank" className="cursor-pointer bg-purple-200 text-nowrap px-3 py-2 hover:bg-purple-500">Open File</a>
+                                            </td>
                                             <td className="border-2 border-gray-300 p-3">{new Date(t.taskDetails.createdAt).toLocaleDateString()}</td>
                                             <td className="border-2 border-gray-300 p-3">{new Date(t.taskDetails.deadlineDate).toLocaleDateString()}</td>
                                             <td className="border-2 border-gray-300 p-3 ">{new Date(t.assignedTo[0].submittedAt).toLocaleDateString()}</td>

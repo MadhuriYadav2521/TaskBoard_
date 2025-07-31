@@ -4,7 +4,9 @@ import jwt from 'jsonwebtoken'
 
 export const registerUser = async (req, res) => {
     try {
-        const { fName, lName, email, password, phone, role, grade, subjects } = req.body
+        const { fName, lName, email, password, phone, role, grade,  } = req.body
+
+        const subjects = [ 'Mathematics', 'English', 'Art', 'Science', 'Social Studies' ]
 
         if (!fName || !lName || !email || !password || !phone || !role || !subjects) return res.status(400).json({ status: 400, message: "All fields are required." })
 
@@ -14,7 +16,7 @@ export const registerUser = async (req, res) => {
         const profileImgFile = req.files?.profileImg?.[0];
         console.log(profileImgFile, "profileImgFile");
 
-        const profileImg = profileImgFile ? profileImgFile.filename : "";
+        const profileImg = profileImgFile ? profileImgFile.path : "";  // Cloudinary URL
         console.log(profileImg, "profileImg");
 
 

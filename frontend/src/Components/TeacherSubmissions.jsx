@@ -180,7 +180,10 @@ const TeacherSubmissions = () => {
                                                 <td className="border-2 border-gray-300 p-3">{i + 1}</td>
                                                 <td className="border-2 border-gray-300 p-3">{t.studentName}</td>
                                                 <td className="border-2 border-gray-300 p-3">{t.studentEmail}</td>
-                                                <td className="border-2 border-gray-300 p-3">{t.submissionFile}</td>
+                                                <td className="border-2 border-gray-300 p-3">
+                                                    {/* {t.submissionFile} */}
+                                                    <a href={`https://docs.google.com/viewer?url=${t.submissionFile}&embedded=true`} target="_blank" className="cursor-pointer bg-purple-200 text-nowrap px-3 py-2 hover:bg-purple-500">Open File</a>
+                                                </td>
                                                 <td className="border-2 border-gray-300 p-3">{t.submittedAt !== null && new Date(t.submittedAt).toLocaleDateString()}</td>
                                                 <td className={`border-2 border-gray-300 p-3 ${t.status == "Complete" ? "text-blue-700" : t.status == "Accepted" ? "text-green-700" : "text-red-500"}`}>{t.status}</td>
                                                 <td className="border-2 border-gray-300 p-3">

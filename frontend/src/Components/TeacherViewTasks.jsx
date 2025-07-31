@@ -99,7 +99,9 @@ const TeacherViewTasks = () => {
                                     <td className="border-2 border-gray-300 p-3">{t.discription}</td>
                                     <td className="border-2 border-gray-300 p-3">{t.subject}</td>
                                     <td className="border-2 border-gray-300 p-3">{t.grade}</td>
-                                    <td className="text-ellipsis border-2 border-gray-300 p-3">{t.taskFileName}</td>
+                                    <td className="text-ellipsis border-2 border-gray-300 p-3">
+                                       <a href={`https://docs.google.com/viewer?url=${t.taskFileName}&embedded=true`} target="_blank" className="cursor-pointer bg-purple-200 text-nowrap px-3 py-2 hover:bg-purple-500">Open File</a>
+                                    </td>
                                     <td className="border-2 border-gray-300 p-3">{new Date(t.createdAt).toLocaleDateString()}</td>
                                     <td className="border-2 border-gray-300 p-3">{new Date(t.deadlineDate).toLocaleDateString()}</td>
                                 </tr>

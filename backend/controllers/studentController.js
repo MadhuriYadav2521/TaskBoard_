@@ -257,7 +257,7 @@ export const submitTask = async (req, res) => {
         const taskFile = req?.files?.submissionFile?.[0]
         console.log(taskFile, "taskFile");
 
-        const submissionFile = taskFile ? taskFile?.filename : ""
+        const submissionFile = taskFile ? taskFile?.path : ""    // Cloudinary path url
         console.log(submissionFile, "submissionFile");
 
         const submitTaskFile = await TaskSubmissions.findOneAndUpdate(

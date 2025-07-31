@@ -103,7 +103,7 @@ const Navbar = () => {
                             <img
                                 src={
                                     currentUser?.profileImg
-                                        ? `https://taskboard-sewf.onrender.com/uploads/${currentUser?.profileImg}`
+                                        ? `${currentUser?.profileImg}`
                                         : 'https://cdn-icons-png.flaticon.com/512/7915/7915522.png'
                                 }
                                 alt="profile"
@@ -160,7 +160,7 @@ const Navbar = () => {
                                 <img
                                     src={
                                         currentUser?.profileImg
-                                            ? `https://taskboard-sewf.onrender.com/uploads/${currentUser?.profileImg}`
+                                            ? `${currentUser?.profileImg}`
                                             : 'https://cdn-icons-png.flaticon.com/512/7915/7915522.png'
                                     }
                                     className="object-cover w-full h-full"

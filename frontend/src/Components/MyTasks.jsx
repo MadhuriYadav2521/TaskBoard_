@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Navbar from './Navbar'
 import axios from 'axios';
+import Loading from './Loading';
 
 const MyTasks = () => {
     const userData = JSON.parse(localStorage.getItem("sapuserData"))
@@ -15,6 +16,7 @@ const MyTasks = () => {
     console.log(selectedTask, "selectedTask");
     const fileRef = useRef()
     const [submissionFile, setSubmissionFile] = useState("")
+       const [loading, setLoading] = useState(false)
 
     const getTaskData = async () => {
         try {
@@ -55,6 +57,7 @@ const MyTasks = () => {
                 alert("Please select file.")
                 return
             }
+            setLoading(true)
             const formData = new FormData()
             formData.append("studentId", userData?._id);
             formData.append("taskId", selectedTask?.taskId);
@@ -64,13 +67,16 @@ const MyTasks = () => {
             console.log(response.data, "vvvvvvvvv");
 
             if (response.data.success == true) {
+                setLoading(false)
                 alert(response.data.message)
                 setShowDetailedTask(false)
                 getTaskData()
             } else {
+                setLoading(false)
                 alert(response.data.message)
             }
         } catch (error) {
+            setLoading(false)
             console.log(error);
             alert("Internal server error.")
         }
@@ -80,6 +86,7 @@ const MyTasks = () => {
 
     return (
         <>
+        {loading && <Loading /> }
             <div className="w-full  bg-white p-4 overflow-x-auto relative ">
                 {showDetailedTask ? (
                     <>
@@ -112,7 +119,10 @@ const MyTasks = () => {
                                     </tr>
                                     <tr className="border-2 border-gray-200">
                                         <td className="px-4 border-2 py-3 font-semibold text-gray-700">Task File</td>
-                                        <td className="px-4 py-3 text-gray-800">{selectedTask.taskDetails.taskFileName}</td>
+                                        <td className="px-4 py-3 text-gray-800">
+                                            {/* {selectedTask.taskDetails.taskFileName} */}
+                                            <a href={`https://docs.google.com/viewer?url=${selectedTask.taskDetails.taskFileName}&embedded=true`} target="_blank" className="cursor-pointer bg-purple-200 text-nowrap px-3 py-2 hover:bg-purple-500">Open File</a>
+                                            </td>
                                     </tr>
                                     <tr className='border-2 border-gray-200'>
                                         <td className="px-4 border-2 py-3 font-semibold text-gray-700">Deadline</td>
@@ -185,7 +195,10 @@ const MyTasks = () => {
                                             <td className="border-2 border-gray-300 p-3">{i + 1}</td>
                                             <td className="border-2 border-gray-300 p-3">{t.taskDetails.taskTitle}</td>
                                             <td className="border-2 border-gray-300 p-3">{t.taskDetails.subject}</td>
-                                            <td className="text-ellipsis border-2 border-gray-300 p-3">{t.taskDetails.taskFileName}</td>
+                                            <td className="text-ellipsis border-2 border-gray-300 p-3">
+                                                {/* {t.taskDetails.taskFileName} */}
+                                                 <a href={`https://docs.google.com/viewer?url=${t.taskDetails.taskFileName}&embedded=true`} target="_blank" className="cursor-pointer bg-purple-200 text-nowrap px-3 py-2 hover:bg-purple-500">Open File</a>
+                                                </td>
                                             <td className="border-2 border-gray-300 p-3">{new Date(t.taskDetails.createdAt).toLocaleDateString()}</td>
                                             <td className="border-2 border-gray-300 p-3">{new Date(t.taskDetails.deadlineDate).toLocaleDateString()}</td>
                                             <td className="border-2 border-gray-300 p-3 text-red-600">{t.assignedTo[0].status}</td>

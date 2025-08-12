@@ -26,10 +26,11 @@
 
 ### 👨‍🏫 Teacher Dashboard
 
-
+![Teacher Dashboard](./Teacher%20Dashboard.jpeg)
 
 ### 🎓 Student Dashboard
 
+![Student Dashboard](./Student%20Dashboard.jpeg)
 
 
 ---

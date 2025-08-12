@@ -22,18 +22,6 @@
 
 ---
 
-## 🖼️ Screenshots
-
-### 👨‍🏫 Teacher Dashboard
-
-![Teacher Dashboard](./Teacher%20Dashboard.jpeg)
-
-### 🎓 Student Dashboard
-
-![Student Dashboard](./Student%20Dashboard.jpeg)
-
-
----
 
 ## 🛠️ Tech Stack
 
@@ -44,5 +32,18 @@
 - **Real-Time Communication:** Socket.io
 - **File Uploads:** multer + Cloudinary
 - **Others:** JWT Authentication, Responsive Web Design
+
+---
+
+## 🖼️ Screenshots
+
+### 👨‍🏫 Teacher Dashboard
+
+![Teacher Dashboard](./Teacher%20Dashboard.jpeg)
+
+### 🎓 Student Dashboard
+
+![Student Dashboard](./Student%20Dashboard.jpeg)
+
 
 ---
